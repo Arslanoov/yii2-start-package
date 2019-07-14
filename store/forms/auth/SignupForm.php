@@ -11,19 +11,19 @@ class SignupForm extends Model
     public $email;
     public $password;
 
-    public function rules()
+    public function rules(): array
     {
         return [
             ['username', 'trim'],
             ['username', 'required'],
-            ['username', 'unique', 'targetClass' => User::class, 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
+            ['username', 'unique', 'targetClass' => User::class, 'message' => 'Пользователь с таким именем уже существует'],
+            ['username', 'string', 'min' => 4, 'max' => 32],
 
             ['email', 'trim'],
             ['email', 'required'],
             ['email', 'email'],
             ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => User::class, 'message' => 'This email address has already been taken.'],
+            ['email', 'unique', 'targetClass' => User::class, 'message' => 'Пользователь с такой почтой уже существует'],
 
             ['password', 'required'],
             ['password', 'string', 'min' => 6, 'max' => 32],
