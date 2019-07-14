@@ -1,6 +1,6 @@
 <?php
 
-use yii\widgets\Menu;
+use dmstr\widgets\Menu;
 
 ?>
 

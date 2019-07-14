@@ -1,12 +1,16 @@
 <?php
+
 use backend\assets\AppAsset;
 use yii\helpers\Html;
+use dmstr\web\AdminLteAsset;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
 
-dmstr\web\AdminLteAsset::register($this);
+AdminLteAsset::register($this);
+
 ?>
+
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">

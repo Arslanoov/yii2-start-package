@@ -18,7 +18,9 @@
         "yiisoft/yii2": "^2.0.21",
         "yiisoft/yii2-bootstrap": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "dmstr/yii2-adminlte-asset": "^2.4"
+        "dmstr/yii2-adminlte-asset": "^2.4",
+        "kartik-v/yii2-widgets": "*",
+        "kartik-v/yii2-field-range": "*"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
