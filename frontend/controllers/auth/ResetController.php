@@ -4,47 +4,89 @@ namespace frontend\controllers\auth;
 
 use store\forms\auth\PasswordResetForm;
 use store\forms\auth\ResetPasswordForm;
-use yii\web\Controller;
+use store\useCases\auth\ResetService;
 use Yii;
-use InvalidArgumentException;
+use yii\filters\AccessControl;
 use yii\web\BadRequestHttpException;
+use yii\web\Controller;
+use yii\base\Module;
+use DomainException;
 
 class ResetController extends Controller
 {
-    public function actionRequestPasswordReset()
+    private $service;
+
+    public function __construct(string $id, Module $module, ResetService $service, array $config = [])
     {
-        $model = new PasswordResetForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail()) {
-                Yii::$app->session->setFlash('success', 'Check your email for further instructions.');
+        parent::__construct($id, $module, $config);
+        $this->service = $service;
+    }
 
+    public function behaviors(): array
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    [
+                        'allow' => false,
+                        'roles' => ['@'],
+                    ],
+                    [
+                        'allow' => true,
+                        'roles' => ['?']
+                    ]
+                ],
+            ],
+        ];
+    }
+
+    public function actionRequest()
+    {
+        $form = new PasswordResetForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->service->request($form);
+                Yii::$app->session->setFlash('success', 'Проверьте свою почту для дальнейших инструкций');
                 return $this->goHome();
+            } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
             }
-
-            Yii::$app->session->setFlash('error', 'Sorry, we are unable to reset password for the provided email address.');
         }
 
-        return $this->render('requestPasswordResetToken', [
-            'model' => $model,
+        return $this->render('request', [
+            'model' => $form,
         ]);
     }
 
-    public function actionResetPassword($token)
+    /**
+     * @param $token
+     * @return string|\yii\web\Response
+     * @throws BadRequestHttpException
+     */
+    public function actionConfirm($token)
     {
         try {
-            $model = new ResetPasswordForm($token);
-        } catch (InvalidArgumentException $e) {
+            $this->service->validateToken($token);
+        } catch (DomainException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
 
-        if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
-            Yii::$app->session->setFlash('success', 'New password saved.');
-
-            return $this->goHome();
+        $form = new ResetPasswordForm($token);
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->service->reset($token, $form);
+                Yii::$app->session->setFlash('success', 'Пароль успешно изменен');
+                return $this->goHome();
+            } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
         }
 
-        return $this->render('resetPassword', [
-            'model' => $model,
+        return $this->render('confirm', [
+            'model' => $form,
         ]);
     }
 }

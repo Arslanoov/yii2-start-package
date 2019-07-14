@@ -2,43 +2,64 @@
 
 namespace frontend\controllers\auth;
 
-use store\forms\auth\SignupForm;
-use yii\web\Controller;
+use store\repositories\UserRepository;
+use store\useCases\auth\SignupService;
 use Yii;
-use InvalidArgumentException;
-use yii\web\BadRequestHttpException;
+use store\forms\auth\SignupForm;
+use yii\base\Module;
+use yii\web\Controller;
+use DomainException;
 
 class SignupController extends Controller
 {
+    private $service;
+    private $users;
+
+    public function __construct(string $id, Module $module, SignupService $service, UserRepository $users, array $config = [])
+    {
+        parent::__construct($id, $module, $config);
+        $this->service = $service;
+        $this->users = $users;
+    }
+
     public function actionRequest()
     {
-        $model = new SignupForm();
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', 'Thank you for registration. Please check your inbox for verification email.');
+        if (!Yii::$app->user->isGuest) {
             return $this->goHome();
         }
 
-        return $this->render('signup', [
-            'model' => $model,
+        $form = new SignupForm();
+        if ($form->load(Yii::$app->request->post()) && $form->validate()) {
+            try {
+                $this->service->signup($form);
+                Yii::$app->session->setFlash('success', 'Проверьте свою почту для подтверждения регистрации');
+                return $this->goHome();
+            } catch (DomainException $e) {
+                Yii::$app->errorHandler->logException($e);
+                Yii::$app->session->setFlash('error', $e->getMessage());
+            }
+        }
+
+        return $this->render('request', [
+            'model' => $form,
         ]);
     }
 
     public function actionConfirm($token)
     {
+        if (!Yii::$app->user->isGuest) {
+            return $this->goHome();
+        }
+
         try {
-            $model = new VerifyEmailForm($token);
-        } catch (InvalidArgumentException $e) {
-            throw new BadRequestHttpException($e->getMessage());
+            $this->service->confirm($token);
+            Yii::$app->session->setFlash('success', 'Ваш аккаунт была подтвержден');
+            return $this->redirect(['/auth/auth/login']);
+        } catch (DomainException $e) {
+            Yii::$app->errorHandler->logException($e);
+            Yii::$app->session->setFlash('error', $e->getMessage());
         }
 
-        if ($user = $model->verifyEmail()) {
-            if (Yii::$app->user->login($user)) {
-                Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
-                return $this->goHome();
-            }
-        }
-
-        Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
         return $this->goHome();
     }
 }
