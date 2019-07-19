@@ -11,12 +11,14 @@ use yii\web\UploadedFile;
 class UserEditForm extends Model
 {
     public $username;
+    public $email;
 
     public $_user;
 
     public function __construct(User $user, $config = [])
     {
         $this->username = $user->username;
+        $this->email = $user->email;
         $this->_user = $user;
         parent::__construct($config);
     }
@@ -24,7 +26,8 @@ class UserEditForm extends Model
     public function rules(): array
     {
         return [
-            [['username'], 'required'],
+            [['username', 'email'], 'required'],
+            ['email', 'email'],
             ['username', 'unique', 'targetClass' => User::class, 'filter' => ['<>', 'id', $this->_user->id]]
         ];
     }
@@ -33,23 +36,9 @@ class UserEditForm extends Model
     {
         return [
             'id' => 'ID',
-            'photo' => 'Фотография',
             'username' => 'Имя',
+            'email' => 'E-mail',
             'aboutMe' => 'Обо мне'
         ];
-    }
-
-    public function rolesList(): array
-    {
-        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
-    }
-
-    public function beforeValidate(): bool
-    {
-        if (parent::beforeValidate()) {
-            $this->photo = UploadedFile::getInstance($this, 'photo');
-            return true;
-        }
-        return false;
     }
 }

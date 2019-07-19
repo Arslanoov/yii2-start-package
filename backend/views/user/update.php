@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = 'Обновить';
     <?php $form = ActiveForm::begin(); ?>
 
     <?= $form->field($model, 'username')->textInput(['maxLength' => true]) ?>
+    <?= $form->field($model, 'email')->textInput(['maxLength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Сохранить', ['class' => 'btn btn-primary']) ?>

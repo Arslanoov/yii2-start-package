@@ -35,7 +35,8 @@ class UserManageService
         $user = $this->users->get($id);
 
         $user->edit(
-            $form->username
+            $form->username,
+            $form->email
         );
 
         $this->users->save($user);
