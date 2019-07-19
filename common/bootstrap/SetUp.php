@@ -2,8 +2,11 @@
 
 namespace common\bootstrap;
 
+use store\dispatchers\SimpleEventDispatcher;
 use store\entities\User\events\UserSignUpConfirmed;
 use store\entities\User\events\UserSignUpRequested;
+use store\listeners\User\UserSignUpConfirmedListener;
+use store\listeners\User\UserSignupRequestedListener;
 use store\useCases\ContactService;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use yii\base\BootstrapInterface;
@@ -31,13 +34,9 @@ class SetUp implements BootstrapInterface
         ]);
 
         $container->setSingleton(EventDispatcher::class, function (Container $container) {
-            return new SimpleEventDispatcher([
-                UserSignUpRequested::class => [
-                    [$container->get(UserSignupRequestedListener::class), 'handle'],
-                ],
-                UserSignUpConfirmed::class => [
-                    [$container->get(UserSignupConfirmedListener::class), 'handle'],
-                ],
+            return new SimpleEventDispatcher($container, [
+                UserSignUpRequested::class => [UserSignupRequestedListener::class],
+                UserSignUpConfirmed::class => [UserSignUpConfirmedListener::class],
             ]);
         });
     }
