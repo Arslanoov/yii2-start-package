@@ -19,24 +19,21 @@ class SignupService
     private $users;
     private $roles;
     private $transaction;
-    private $dispatcher;
 
     public function __construct(
         UserRepository $users,
         RoleManager $roles,
-        TransactionManager $transaction,
-        EventDispatcher $dispatcher
+        TransactionManager $transaction
     )
     {
         $this->users = $users;
         $this->roles = $roles;
         $this->transaction = $transaction;
-        $this->dispatcher = $dispatcher;
     }
 
     /**
      * @param SignupForm $form
-     * @throws \Exception
+     * @throws \Throwable
      */
     public function signup(SignupForm $form): void
     {
@@ -51,8 +48,6 @@ class SignupService
             $this->roles->assign($user->id, Rbac::ROLE_USER);
         });
 
-        $this->dispatcher->dispatchAll($user->releaseEvents());
-
         $this->users->save($user);
     }
 
@@ -64,8 +59,6 @@ class SignupService
 
         $user = $this->users->findByEmailVerificationToken($token);
         $user->confirmSignup();
-
-        $this->dispatcher->dispatchAll($user->releaseEvents());
 
         $this->users->save($user);
     }

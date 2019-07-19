@@ -2,11 +2,19 @@
 
 namespace store\repositories;
 
+use store\dispatchers\EventDispatcher;
 use store\entities\User\User;
 use RuntimeException;
 
 class UserRepository
 {
+    private $dispatcher;
+
+    public function __construct(EventDispatcher $dispatcher)
+    {
+        $this->dispatcher = $dispatcher;
+    }
+
     public function findByUsername(string $username): User
     {
         return $this->getBy([
@@ -60,6 +68,8 @@ class UserRepository
         if (!$user->save()) {
             throw new RuntimeException('Не получилось сохранить пользователя');
         }
+
+        $this->dispatcher->dispatchAll($user->releaseEvents());
     }
 
     public function remove(User $user): void
@@ -67,6 +77,8 @@ class UserRepository
         if (!$user->delete()) {
             throw new RuntimeException('Не получилось удалить пользователя');
         }
+
+        $this->dispatcher->dispatchAll($user->releaseEvents());
     }
 
     private function getBy(array $condition): User

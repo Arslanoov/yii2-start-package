@@ -40,6 +40,7 @@ class SetUp implements BootstrapInterface
             return new DeferredEventDispatcher(new SimpleEventDispatcher($container, [
                 UserSignUpRequested::class => [UserSignupRequestedListener::class],
                 UserSignUpConfirmed::class => [UserSignupConfirmedListener::class],
-        ]));
+            ]));
+        });
     }
 }
