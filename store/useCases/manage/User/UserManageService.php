@@ -7,14 +7,20 @@ use store\forms\manage\User\UserCreateForm;
 use store\forms\manage\User\UserEditForm;
 use store\repositories\UserRepository;
 use DomainException;
+use store\services\RoleManager;
+use store\services\TransactionManager;
 
 class UserManageService
 {
     private $users;
+    private $roles;
+    private $transaction;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $users, RoleManager $roles, TransactionManager $transaction)
     {
-        $this->users = $repository;
+        $this->users = $users;
+        $this->roles = $roles;
+        $this->transaction = $transaction;
     }
 
     public function create(UserCreateForm $form): User
@@ -24,6 +30,11 @@ class UserManageService
             $form->email,
             $form->password
         );
+
+        $this->transaction->wrap(function () use ($user, $form) {
+            $this->users->save($user);
+            $this->roles->assign($user->id, $form->role);
+        });
 
         $this->users->save($user);
 
@@ -38,6 +49,11 @@ class UserManageService
             $form->username,
             $form->email
         );
+
+        $this->transaction->wrap(function () use ($user, $form) {
+            $this->users->save($user);
+            $this->roles->assign($user->id, $form->role);
+        });
 
         $this->users->save($user);
     }

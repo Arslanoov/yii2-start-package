@@ -12,6 +12,7 @@ class UserEditForm extends Model
 {
     public $username;
     public $email;
+    public $role;
 
     public $_user;
 
@@ -19,6 +20,8 @@ class UserEditForm extends Model
     {
         $this->username = $user->username;
         $this->email = $user->email;
+        $roles = Yii::$app->authManager->getRolesByUser($user->id);
+        $this->role = $roles ? reset($roles)->name : null;
         $this->_user = $user;
         parent::__construct($config);
     }
@@ -26,7 +29,7 @@ class UserEditForm extends Model
     public function rules(): array
     {
         return [
-            [['username', 'email'], 'required'],
+            [['username', 'email', 'role'], 'required'],
             ['email', 'email'],
             ['username', 'unique', 'targetClass' => User::class, 'filter' => ['<>', 'id', $this->_user->id]]
         ];
@@ -37,8 +40,12 @@ class UserEditForm extends Model
         return [
             'id' => 'ID',
             'username' => 'Имя',
-            'email' => 'E-mail',
-            'aboutMe' => 'Обо мне'
+            'email' => 'E-mail'
         ];
+    }
+
+    public function rolesList(): array
+    {
+        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
     }
 }

@@ -18,12 +18,13 @@ class UserSearch extends Model
     public $username;
     public $email;
     public $status;
+    public $role;
 
-    public function rules()
+    public function rules(): array
     {
         return [
             [['id', 'status'], 'integer'],
-            [['username', 'email'], 'safe'],
+            [['username', 'email', 'role'], 'safe'],
             [['date_from', 'date_to', 'updated_from', 'updated_to'], 'date', 'format' => 'php:Y-m-d'],
         ];
     }
@@ -46,6 +47,11 @@ class UserSearch extends Model
             'u.status' => $this->status,
         ]);
 
+        if (!empty($this->role)) {
+            $query->joinWith('{{%auth_assignments}} a', 'a.user_id = u.id');
+            $query->andWhere(['a.item_name' => $this->role]);
+        }
+
         $query
             ->andFilterWhere(['like', 'u.username', $this->username])
             ->andFilterWhere(['like', 'u.email', $this->email])
@@ -55,5 +61,10 @@ class UserSearch extends Model
             ->andFilterWhere(['<=', 'u.updated_at', $this->updated_to ? strtotime($this->updated_to . ' 23:59:59') : null]);
 
         return $dataProvider;
+    }
+
+    public function rolesList(): array
+    {
+        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
     }
 }

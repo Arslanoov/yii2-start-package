@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Url;
+use common\widgets\Alert;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -29,6 +30,8 @@ $fieldOptions2 = [
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg"></p>
+
+        <?= Alert::widget() ?>
 
         <?php $form = ActiveForm::begin(['id' => 'login-form', 'enableClientValidation' => false]); ?>
 

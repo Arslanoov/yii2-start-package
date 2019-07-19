@@ -2,26 +2,39 @@
 
 namespace store\useCases\auth;
 
+use store\access\Rbac;
 use store\entities\User\User;
 use store\forms\auth\SignupForm;
 use store\repositories\UserRepository;
 use DomainException;
+use store\services\RoleManager;
+use store\services\TransactionManager;
 use yii\mail\MailerInterface;
 
 class SignupService
 {
     private $mailer;
     private $users;
+    private $roles;
+    private $transaction;
 
     public function __construct(
         UserRepository $users,
-        MailerInterface $mailer
+        MailerInterface $mailer,
+        RoleManager $roles,
+        TransactionManager $transaction
     )
     {
         $this->mailer = $mailer;
         $this->users = $users;
+        $this->roles = $roles;
+        $this->transaction = $transaction;
     }
 
+    /**
+     * @param SignupForm $form
+     * @throws \Exception
+     */
     public function signup(SignupForm $form): void
     {
         $user = User::requestSignup(
@@ -29,6 +42,11 @@ class SignupService
             $form->email,
             $form->password
         );
+
+        $this->transaction->wrap(function () use ($user) {
+            $this->users->save($user);
+            $this->roles->assign($user->id, Rbac::ROLE_USER);
+        });
 
         $this->users->save($user);
     }

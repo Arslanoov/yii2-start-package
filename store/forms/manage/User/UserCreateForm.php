@@ -17,7 +17,7 @@ class UserCreateForm extends Model
     public function rules(): array
     {
         return [
-            [['username', 'email'], 'required'],
+            [['username', 'email', 'role'], 'required'],
             ['email', 'email'],
             [['username', 'email'], 'string', 'max' => 255],
             [['username', 'email'], 'unique', 'targetClass' => User::class],
@@ -33,5 +33,10 @@ class UserCreateForm extends Model
             'email' => 'E-mail',
             'password' => 'Пароль'
         ];
+    }
+
+    public function rolesList(): array
+    {
+        return ArrayHelper::map(Yii::$app->authManager->getRoles(), 'name', 'description');
     }
 }

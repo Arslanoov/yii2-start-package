@@ -66,6 +66,11 @@ $this->params['breadcrumbs'][] = 'Просмотр пользователя';
                         'value' => UserHelper::statusLabel($model->status),
                         'format' => 'raw',
                     ],
+                    [
+                        'label' => 'Роль',
+                        'value' => implode(', ', ArrayHelper::getColumn(Yii::$app->authManager->getRolesByUser($model->id), 'description')),
+                        'format' => 'raw',
+                    ],
                 ],
             ]) ?>
         </div>
