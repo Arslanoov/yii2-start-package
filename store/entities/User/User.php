@@ -11,7 +11,7 @@ use yii\db\ActiveRecord;
 use DomainException;
 use yii\web\IdentityInterface;
 
-class User extends ActiveRecord implements IdentityInterface, AggregateRoot
+class User extends ActiveRecord implements AggregateRoot
 {
     use EventTrait;
 
@@ -92,33 +92,6 @@ class User extends ActiveRecord implements IdentityInterface, AggregateRoot
             throw new DomainException('Пользователь уже не активирован');
         }
         $this->status = self::STATUS_WAIT;
-    }
-
-    public static function findIdentity($id)
-    {
-        return self::findOne([
-            'id' => $id
-        ]);
-    }
-
-    public static function findIdentityByAccessToken($token, $type = null)
-    {
-
-    }
-
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getAuthKey(): string
-    {
-        return $this->auth_key;
-    }
-
-    public function validateAuthKey($authKey): bool
-    {
-        return $this->auth_key === $authKey;
     }
 
     public function requestPasswordReset(): void

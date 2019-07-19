@@ -6,7 +6,6 @@ use store\entities\User\User;
 use store\forms\manage\User\UserCreateForm;
 use store\forms\manage\User\UserEditForm;
 use store\repositories\UserRepository;
-use DomainException;
 use store\services\RoleManager;
 use store\services\TransactionManager;
 
