@@ -51,7 +51,7 @@ class SignupService
             $this->roles->assign($user->id, Rbac::ROLE_USER);
         });
 
-        $this->dispatcher->dispatch(new UserSignUpRequested($user));
+        $this->dispatcher->dispatchAll($user->releaseEvents());
 
         $this->users->save($user);
     }
@@ -65,7 +65,7 @@ class SignupService
         $user = $this->users->findByEmailVerificationToken($token);
         $user->confirmSignup();
 
-        $this->dispatcher->dispatch(new UserSignUpConfirmed($user));
+        $this->dispatcher->dispatchAll($user->releaseEvents());
 
         $this->users->save($user);
     }

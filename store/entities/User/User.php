@@ -2,13 +2,19 @@
 
 namespace store\entities\User;
 
+use store\entities\AggregateRoot;
+use store\entities\EventTrait;
+use store\entities\User\events\UserSignUpConfirmed;
+use store\entities\User\events\UserSignUpRequested;
 use Yii;
 use yii\db\ActiveRecord;
 use DomainException;
 use yii\web\IdentityInterface;
 
-class User extends ActiveRecord implements IdentityInterface
+class User extends ActiveRecord implements IdentityInterface, AggregateRoot
 {
+    use EventTrait;
+
     const STATUS_WAIT = 0;
     const STATUS_ACTIVE = 1;
 
@@ -50,6 +56,7 @@ class User extends ActiveRecord implements IdentityInterface
         $user->status = self::STATUS_WAIT;
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        $user->recordEvent(new UserSignUpRequested($user));
         return $user;
     }
 
@@ -67,6 +74,7 @@ class User extends ActiveRecord implements IdentityInterface
         }
         $this->status = self::STATUS_ACTIVE;
         $this->verification_token = null;
+        $this->recordEvent(new UserSignUpConfirmed($this));
     }
 
     public function activate(): void

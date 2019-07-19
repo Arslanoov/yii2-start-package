@@ -33,6 +33,18 @@ class SimpleEventDispatcher implements EventDispatcher
     }
 
     /**
+     * @param array $events
+     * @throws \yii\base\InvalidConfigException
+     * @throws \yii\di\NotInstantiableException
+     */
+    public function dispatchAll(array $events): void
+    {
+        foreach ($events as $event) {
+            $this->dispatch($event);
+        }
+    }
+
+    /**
      * @param $listenerClass
      * @return callable
      * @throws \yii\base\InvalidConfigException
