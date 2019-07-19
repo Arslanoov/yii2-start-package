@@ -2,6 +2,7 @@
 
 namespace common\bootstrap;
 
+use store\dispatchers\DeferredEventDispatcher;
 use store\dispatchers\SimpleEventDispatcher;
 use store\entities\User\events\UserSignUpConfirmed;
 use store\entities\User\events\UserSignUpRequested;
@@ -33,11 +34,12 @@ class SetUp implements BootstrapInterface
             $app->params['adminEmail']
         ]);
 
-        $container->setSingleton(EventDispatcher::class, function (Container $container) {
-            return new SimpleEventDispatcher($container, [
+        $container->setSingleton(EventDispatcher::class, DeferredEventDispatcher::class);
+
+        $container->setSingleton(DeferredEventDispatcher::class, function (Container $container) {
+            return new DeferredEventDispatcher(new SimpleEventDispatcher($container, [
                 UserSignUpRequested::class => [UserSignupRequestedListener::class],
-                UserSignUpConfirmed::class => [UserSignUpConfirmedListener::class],
-            ]);
-        });
+                UserSignUpConfirmed::class => [UserSignupConfirmedListener::class],
+        ]));
     }
 }
