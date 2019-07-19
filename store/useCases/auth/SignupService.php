@@ -16,7 +16,6 @@ use yii\mail\MailerInterface;
 
 class SignupService
 {
-    private $mailer;
     private $users;
     private $roles;
     private $transaction;
@@ -24,13 +23,11 @@ class SignupService
 
     public function __construct(
         UserRepository $users,
-        MailerInterface $mailer,
         RoleManager $roles,
         TransactionManager $transaction,
         EventDispatcher $dispatcher
     )
     {
-        $this->mailer = $mailer;
         $this->users = $users;
         $this->roles = $roles;
         $this->transaction = $transaction;
