@@ -48,7 +48,7 @@ class UserSearch extends Model
         ]);
 
         if (!empty($this->role)) {
-            $query->joinWith('{{%auth_assignments}} a', 'a.user_id = u.id');
+            $query->innerJoin('{{%auth_assignments}} a', 'a.user_id = u.id');
             $query->andWhere(['a.item_name' => $this->role]);
         }
 
