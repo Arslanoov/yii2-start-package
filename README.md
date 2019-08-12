@@ -1,1 +1,1 @@
-# yii2-store
+# yii2-core

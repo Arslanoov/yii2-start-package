@@ -1,12 +1,12 @@
 <?php
 
-use store\helpers\UserHelper;
+use core\helpers\UserHelper;
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $model store\entities\User\User */
+/* @var $model core\entities\User\User */
 
 $this->title = 'Просмотр пользователя №' . $model->id;
 

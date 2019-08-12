@@ -1,7 +1,7 @@
 <?php
 
-use store\entities\User\User;
-use store\helpers\UserHelper;
+use core\entities\User\User;
+use core\helpers\UserHelper;
 use yii\grid\ActionColumn;
 use yii\helpers\Html;
 use yii\grid\GridView;

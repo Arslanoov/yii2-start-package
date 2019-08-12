@@ -2,10 +2,10 @@
 
 namespace common\auth;
 
-use store\readModels\UserReadRepository;
+use core\readModels\UserReadRepository;
 use yii\web\IdentityInterface;
 use yii\base\NotSupportedException;
-use store\entities\User\User;
+use core\entities\User\User;
 use Yii;
 
 class Identity implements IdentityInterface

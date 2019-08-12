@@ -2,7 +2,7 @@
 
 namespace backend\widgets\grid;
 
-use store\access\Rbac;
+use core\access\Rbac;
 use Yii;
 use yii\grid\DataColumn;
 use yii\rbac\Item;

@@ -3,8 +3,8 @@
 namespace backend\controllers;
 
 use common\auth\Identity;
-use store\forms\auth\LoginForm;
-use store\useCases\auth\AuthService;
+use core\forms\auth\LoginForm;
+use core\useCases\auth\AuthService;
 use yii\base\Module;
 use yii\web\Controller;
 use Yii;

@@ -2,19 +2,19 @@
 
 namespace common\bootstrap;
 
-use store\dispatchers\DeferredEventDispatcher;
-use store\dispatchers\EventDispatcher;
-use store\listeners\User\UserSignUpRequestedListener;
-use store\useCases\ContactService;
-use store\dispatchers\SimpleEventDispatcher;
-use store\listeners\User\UserSignUpConfirmedListener;
+use core\dispatchers\DeferredEventDispatcher;
+use core\dispatchers\EventDispatcher;
+use core\listeners\User\UserSignUpRequestedListener;
+use core\useCases\ContactService;
+use core\dispatchers\SimpleEventDispatcher;
+use core\listeners\User\UserSignUpConfirmedListener;
 use Yii;
 use yii\base\BootstrapInterface;
 use yii\di\Container;
 use yii\mail\MailerInterface;
 use yii\rbac\ManagerInterface;
-use store\entities\User\events\UserSignUpRequested;
-use store\entities\User\events\UserSignUpConfirmed;
+use core\entities\User\events\UserSignUpRequested;
+use core\entities\User\events\UserSignUpConfirmed;
 
 class SetUp implements BootstrapInterface
 {

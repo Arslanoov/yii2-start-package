@@ -2,7 +2,7 @@
 
 namespace console\controllers;
 
-use store\useCases\manage\User\UserManageService;
+use core\useCases\manage\User\UserManageService;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 

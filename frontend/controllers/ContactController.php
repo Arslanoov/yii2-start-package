@@ -2,10 +2,10 @@
 
 namespace frontend\controllers;
 
-use store\forms\ContactForm;
+use core\forms\ContactForm;
 use yii\base\Module;
 use yii\web\Controller;
-use store\useCases\ContactService;
+use core\useCases\ContactService;
 use Yii;
 use DomainException;
 

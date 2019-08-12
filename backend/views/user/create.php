@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this yii\web\View */
-/* @var $model store\forms\manage\User\UserCreateForm */
+/* @var $model core\forms\manage\User\UserCreateForm */
 
 use yii\bootstrap\ActiveForm;
 use yii\helpers\Html;

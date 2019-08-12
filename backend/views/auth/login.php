@@ -7,7 +7,7 @@ use common\widgets\Alert;
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
-/* @var $model store\forms\auth\LoginForm */
+/* @var $model core\forms\auth\LoginForm */
 
 $this->title = 'Войти';
 
