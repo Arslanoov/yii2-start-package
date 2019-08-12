@@ -23,8 +23,8 @@ Thumbs.db
 # composer itself is not needed
 composer.phar
 
-# Mac DS_Store Files
-.DS_Store
+# Mac DS_core Files
+.DS_core
 
 # phpunit itself is not needed
 phpunit.phar
