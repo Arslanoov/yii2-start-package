@@ -60,8 +60,8 @@ ln -s /app/vagrant/nginx/app.conf /etc/nginx/sites-enabled/app.conf
 echo "Done!"
 
 info "Initailize databases for MySQL"
-mysql -uroot <<< "CREATE DATABASE shop"
-mysql -uroot <<< "CREATE DATABASE shop_test"
+mysql -uroot <<< "CREATE DATABASE start"
+mysql -uroot <<< "CREATE DATABASE start_test"
 echo "Done!"
 
 info "Install composer"

@@ -68,7 +68,7 @@ $fieldOptions2 = [
         </div>
         <!-- /.social-auth-links -->
 
-        <a href="http://yii2-shop.dev/auth/reset/request">Я забыл свой пароль</a><br>
+        <a href="http://yii2-start.dev/auth/reset/request">Я забыл свой пароль</a><br>
 
     </div>
     <!-- /.login-box-body -->

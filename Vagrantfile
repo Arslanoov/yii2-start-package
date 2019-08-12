@@ -7,8 +7,8 @@ required_plugins.each do |plugin|
 end
 
 domains = {
-  frontend: 'yii2-shop.dev',
-  backend:  'backend.yii2-shop.dev'
+  frontend: 'yii2-start.dev',
+  backend:  'backend.yii2-start.dev'
 }
 
 config = {
