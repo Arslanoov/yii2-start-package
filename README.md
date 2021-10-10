@@ -33,13 +33,7 @@
     <li>Установить зависимости composer (composer update)</li>
   </ol>
   
-  Готово!
   Сайт будет доступен по ссылке <a href="http://yii2-start.dev">yii2-start.dev</a>
 </p>
 
 <hr>
-
-<p>
-    Если Вам нужен специалист для создания сайтов на Yii2/Laravel, напишите мне:
-    <a href="mailto:rasularslanoov@gmail.com">rasularslanoov@gmail.com</a>
-</p>
